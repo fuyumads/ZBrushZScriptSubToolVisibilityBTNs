@@ -1,0 +1,49 @@
+
+[RoutineDef, SubToolSetVisible,
+	[VarSet, index,[SubToolGetActiveIndex]]
+	[VarSet, subtool,[SubToolGetStatus, index]]
+	[VarSet, folderIndex,[SubToolGetFolderIndex, index]]
+	[If,(folderIndex > -1),
+        //folder
+		[VarSet,subtoolFolder,[SubToolGetStatus,folderIndex]]// for folder visibility
+        [If,isVisible,
+            [SubToolSetStatus, index, 0x2]
+            ,//else
+            [SubToolSetStatus, index, 0x0]
+        ]
+		,//not a folder
+        [If,isVisible,
+            [SubToolSetStatus, index, 0x1]
+            ,//else
+            [SubToolSetStatus, index, 0x0]
+        ]
+	]
+,isVisible]
+
+
+[IButton, "Zplugin:Custom UI:STool Hide","test",
+    [VarSet, status, 0]
+    [RoutineCall, SubToolSetVisible, status]
+]
+
+[IButton, "Zplugin:Custom UI:STool Show","test",
+    [VarSet, status, 1]
+    [RoutineCall, SubToolSetVisible, status]
+]
+
+[IButton, "Zplugin:Custom UI:ST AllHide","test",
+    [Loop, [SubToolGetCount],
+        [SubToolSelect, n]
+        [VarSet, status, 0]
+        [RoutineCall, SubToolSetVisible, status]
+    ,n]
+]
+
+[IButton, "Zplugin:Custom UI:ST AllShow","test",
+    [Loop, [SubToolGetCount],
+        [SubToolSelect, n]
+        [VarSet, status, 1]
+        [RoutineCall, SubToolSetVisible, status]
+    ,n]
+]
+
